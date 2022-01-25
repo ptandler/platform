@@ -16,9 +16,16 @@ sites:
     -
         map: api.ushahidi.test
         to: /home/vagrant/Code/platform-api/httpdocs
+        php: "7.3"
     -
         map: ushv3.dev
         to: /home/vagrant/Code/platform-api/httpdocs
+        php: "7.3"
+services:
+    - enabled:
+          - "mysql"
+    - disabled:
+          - "postgresql"
 databases:
     - ushahidi
 name: platform-api

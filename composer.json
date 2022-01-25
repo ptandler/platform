@@ -77,7 +77,10 @@
             "http",
             "git"
         ],
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     },
     "autoload": {
         "psr-4": {
