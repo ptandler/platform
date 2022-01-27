@@ -74,6 +74,11 @@ $router->group([
         $router->put('/{id}', 'PostController@update');
         $router->patch('/{id}', 'PostController@patch');
         $router->delete('/{id}', 'PostController@delete');
+        $router->get('/{id}/votes', 'PostVotesController@showAll');
+        $router->get('/{id}/votes/{user_id}', 'PostVotesController@show');
+        $router->put('/{id}/votes/{user_id}', 'PostVotesController@update');
+//        $router->delete('/{id}/votes', 'PostVotesController@deleteAll'); // TODO:PET implement
+//        $router->delete('/{id}/votes/{user_id}', 'PostVotesController@delete'); // TODO:PET implement
     });
 
     $router->group([
