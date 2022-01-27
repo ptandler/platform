@@ -42,12 +42,13 @@ class Post extends BaseModel
         'contact',
         'post_content',
         'completed_stages',
+        'votes',
         'translations',
         'enabled_languages'
     ];
 
     public $errors;
-    
+
     /**
      * Add eloquent style timestamps
      *
@@ -538,6 +539,11 @@ class Post extends BaseModel
         return $this->hasOne(Message::class);
     }
 
+    public function votes()
+    {
+        return $this->hasMany('v5\Models\PostVotes', 'post_id', 'id');
+    }
+
     // public function contact()
     // {
     //     // Lumen 5.8+:
@@ -642,7 +648,6 @@ class Post extends BaseModel
     public function valuesPoint()
     {
         return $this->hasMany('v5\Models\PostValues\PostPoint', 'post_id', 'id');
-        ;
     }
 
     public function valuesRelation()

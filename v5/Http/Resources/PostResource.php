@@ -33,6 +33,7 @@ class PostResource extends BaseResource
             'created',
             'updated',
             'post_date',
+            'votes',
             //            'base_language' => $this->base_language,
             //            'translations' => new TranslationCollection($this->translations),
             //            'enabled_languages' => [
@@ -45,7 +46,7 @@ class PostResource extends BaseResource
     private function getResourcePostContent()
     {
         $values = $this->getPostValues(); // Calling method on Post Model
-        $no_values = $values->count() === 0 ? true : false;
+        $no_values = $values->count() === 0;
         $col = new Collection([
             'values' => $values,
             'tasks' => $this->survey ? $this->survey->tasks : []
@@ -116,6 +117,12 @@ class PostResource extends BaseResource
                         'default' => $this->base_language,
                         'available' => $this->translations->groupBy('language')->keys()
                     ];
+                    break;
+                case 'votes':
+                    $votes = $this->votes;
+                    if ($votes) {
+                        $result['votes'] = new PostVotesResource($votes);
+                    }
                     break;
             }
         }

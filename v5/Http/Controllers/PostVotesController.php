@@ -23,8 +23,9 @@ class PostVotesController extends V5Controller
     {
         // TODO:PET validate post $id!!
         // TODO:PET check authorization: only admin & backend users are allowed to read all votes for a post!
+        // TODO:PET add support for URL parameter if details should be included
         $votes = PostVotes::where('post_id', $id)->get();
-        return new PostVotesResource($votes);
+        return PostVotesResource::withDetails($votes);
     } //end showAll()
 
     /**
@@ -38,8 +39,9 @@ class PostVotesController extends V5Controller
     {
         // TODO:PET validate post $id and $user_id!!
         // TODO:PET check authorization: only user is allowed to see his/her vote
+        // TODO:PET add support for URL parameter if details should be included
         $votes = PostVotes::where('post_id', $id)->where('user_id', $user_id)->get();
-        return new PostVotesResource($votes);
+        return PostVotesResource::withDetails($votes);
     } //end show()
 
     /**
