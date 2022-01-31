@@ -58,3 +58,6 @@ dist/*
 
 # Garden
 .garden
+
+
+/*.log
