@@ -15,6 +15,8 @@ use Ushahidi\Core\StaticEntity;
 use Ushahidi\Core\Traits\Permissions\ManagePosts;
 use Ushahidi\Core\Tool\Permissions\Permissionable;
 
+use v5\Models\PostVotes;
+
 class Post extends StaticEntity
 {
     protected $id;
@@ -35,6 +37,7 @@ class Post extends StaticEntity
     protected $updated;
     protected $locale;
     protected $values;
+    protected $votes;
     protected $post_date;
     protected $tags;
     protected $published_to;
@@ -76,6 +79,21 @@ class Post extends StaticEntity
             'form_id'   => ['form', 'form.id'], /* alias */
             'user_id'   => ['user', 'user.id'], /* alias */
             'parent_id' => ['parent', 'parent.id'], /* alias */
+            'votes'     => function ($data) {
+                if (!isset($data['id'])) {
+                    return [];
+                }
+//                print "Post.getDerived({$data['id']}) .... ";
+                $votes = PostVotes::where('post_id', $data['id']);
+                if (!isset($votes)) {
+                    return [];
+                }
+                return [
+                    'sum' => $votes->sum('vote'),
+                    'avg' => $votes->avg('vote'),
+                    'count' => $votes->count(),
+                ];
+            }
         ];
     }
 
