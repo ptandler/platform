@@ -18,7 +18,8 @@ Frontend: `serve` script (`package.json`) works also fine
 
 ## Database
 
-Login to container: `vagrant ssh`
+- Login to container: `vagrant ssh`
+- Go to project directory: `cd ~/Code/platform-api`
 
 Ushahidi uses [Phinx migrations](https://netlor-phinx.readthedocs.io/en/latest/migrations.html) to manage the DB.
 
@@ -36,3 +37,26 @@ Use the `db.sh` script to connect, Homestead forwards port 33060 on 127.0.0.1
 source .env
 mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USERNAME --password=$DB_PASSWORD $DB_DATABASE
 ```
+
+
+## frontend
+
+# How to get the client up and running?
+
+## git clone and checkout
+
+git clone https://github.com/ptandler/platform-client.git
+git checkout pet-dev
+
+# Build Docker Image
+
+date=$(date +%Y-%m-%d--%H-%M)
+docker build -t ushahidi-client:$date .
+
+or maybe this is enough?
+docker build -f single.stage.Dockerfile -t ushahidi-client:$date .
+... fails ...
+
+## Run container
+
+docker run  --env BACKEND_URL=http://peta.iku.gmbh:8880 -d -p 8888:8080 ushahidi-client:$date
