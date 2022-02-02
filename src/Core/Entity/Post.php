@@ -15,6 +15,7 @@ use Ushahidi\Core\StaticEntity;
 use Ushahidi\Core\Traits\Permissions\ManagePosts;
 use Ushahidi\Core\Tool\Permissions\Permissionable;
 
+use v5\Http\Resources\PostVotesResource;
 use v5\Models\PostVotes;
 
 class Post extends StaticEntity
@@ -88,11 +89,7 @@ class Post extends StaticEntity
                 if (!isset($votes)) {
                     return [];
                 }
-                return [
-                    'sum' => $votes->sum('vote'),
-                    'avg' => $votes->avg('vote'),
-                    'count' => $votes->count(),
-                ];
+                return new PostVotesResource($votes);
             }
         ];
     }
