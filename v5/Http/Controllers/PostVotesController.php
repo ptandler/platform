@@ -16,7 +16,7 @@ class PostVotesController extends V5Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
+     * @param integer $id
      * @return JsonResponse|PostVotesResource
      */
     public function showAll(int $id)
@@ -31,8 +31,8 @@ class PostVotesController extends V5Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
-     * @param  int     $user_id
+     * @param integer $id
+     * @param int $user_id
      * @return JsonResponse|PostVotesResource
      */
     public function show(int $id, int $user_id)
@@ -64,11 +64,10 @@ class PostVotesController extends V5Controller
         }
 
         $input = $request->input();
-
-        if ($input['vote']) {
-            $vote->vote = $input['vote'];
-            $vote->save();
-        }
+        $vote->vote = $input['vote'] || 0;
+        $vote->save();
+        $votes = PostVotes::where('post_id', $id)->get();
+        return new PostVotesResource($votes);
     } //end update()
 
     /**
