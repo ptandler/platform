@@ -69,3 +69,79 @@ mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USERNAME --password=$DB_PASSWOR
   * [Phinx 0.8.1](https://netlor-phinx.readthedocs.io/en/v0.8.1/intro.html) -> used to setup and update database
     * and there especially [how to write new migrations](https://netlor-phinx.readthedocs.io/en/v0.8.1/migrations.html#creating-a-new-migration)
       to add a new or alter an existing table. Really nice tool!
+  * Testing
+    * phpunit
+    * phpspec
+    * [behat](https://docs.behat.org/en/latest/) & [Mink](https://github.com/behat/mink)
+
+## Tests Backend
+
+* behat complains about wrong permissions: do `chmod 600 storage/passport/oauth-private.key`
+  * TODO:PET - when is this created / can it be fixed automatically?
+* TODO:PET code coverage drive missing
+
+
+## Setup production
+
+### Backend
+
+on server checkout source then
+
+If needed: check & adjust ports in `docker-compose.yml`
+
+```bash
+docker-compose up -d
+```
+
+- TODO: explain what does service `platform_tasks` do???
+
+### Frontend
+
+Build Docker Image
+
+```bash
+source .env
+date=$(date +%Y-%m-%d--%H-%M)
+#docker build -t ushahidi-client:$date .
+docker build -t ushahidi-client:$date -f use-build.Dockerfile .
+docker run  --env BACKEND_URL=${BACKEND_URL:-http://192.168.33.110/} -d -p 8888:8080 ushahidi-client:$date
+```
+
+... but this fails with my updated sdk version as this is not yet published ...
+
+```bash
+# get nvm (if not present already)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+# checkout my sdk version and assign npm link
+git clone https://github.com/ptandler/platform-sdk.git
+cd platform-sdk
+git checkout feature/post-votes
+npm i
+npm run build
+npm link
+
+# get client
+cd ..
+git clone https://github.com/ptandler/platform-client.git
+cd platform-client
+
+# link patched sdk to client
+(cd legacy; npm link ushahidi-platform-sdk)
+(cd api; npm link ushahidi-platform-sdk)
+
+# build & use docker to publish image
+npm run build:docker
+# i.e. `npm run build && docker build -t ushahidi-client:$(date +%Y-%m-%d--%H-%M) -f use-build.Dockerfile .`
+
+# assign to remote registry
+docker tag ushahidi-client peta.iku.gmbh:5000/ushahidi-client
+docker push peta.iku.gmbh:5000/ushahidi-client
+```
+
+and on host
+
+```bash
+docker pull peta.iku.gmbh:5000/ushahidi-client
+docker run  --env BACKEND_URL=http://peta.iku.gmbh:8888 -d -p 8080:8080 peta.iku.gmbh:5000/ushahidi-client:latest
+```
