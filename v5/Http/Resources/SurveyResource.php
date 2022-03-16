@@ -26,6 +26,7 @@ class SurveyResource extends BaseResource
             'hide_author',
             'hide_time',
             'hide_location',
+            'icon_url',
             'targeted_survey',
             'can_create'
         ]);

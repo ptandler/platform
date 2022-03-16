@@ -32,6 +32,7 @@ class Form extends StaticEntity
     protected $targeted_survey;
     protected $can_create;
     protected $tags;
+    protected $icon_url;
 
     // DataTransformer
     protected function getDefinition()
@@ -54,6 +55,7 @@ class Form extends StaticEntity
             'hide_author'           => 'bool',
             'hide_time'             => 'bool',
             'hide_location'         => 'bool',
+            'icon_url'              => 'string',
             'require_approval'      => 'bool',
             'everyone_can_create'   => 'bool',
             'targeted_survey'       => 'bool',
