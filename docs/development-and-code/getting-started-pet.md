@@ -4,6 +4,24 @@
 
 `vagrant up` (using Homestead) works fine as described [here](./setup_alternatives/vagrant-setup.md).
 
+Some things did not work out of the box this time:
+* postgres provisioner: postgres was not running for whatever reason. `vagrant ssh` and `sudo systemctl start postgres` (and maybe also enable it?)
+* composer update provisioner: create missing dir `mkdir ~/.composer`
+* adjust php version to 7.3:
+  * edit /etc/nginx/sites-available/* and replace `php7.1` with `php7.3`
+  * `sudo systemctl enable php7.3-fpm`
+  * `sudo systemctl start php7.3-fpm`
+  * `sudo systemctl disable php7.1-fpm`
+  * `sudo systemctl stop php7.1-fpm`
+  * `sudo systemctl restart nginx`
+
+* update 03/2020: maybe due to a virtualbox update, I needed to adjust the allowed range for host-only networks:
+  * `sudo mkdir /etc/vbox`
+  * `sudo nano  /etc/vbox/networks.conf`
+  * Type `* 192.168.0.0/16`
+  * any maybe also `* fe80::/64`
+  * you might need to `sudo systemctl restart virtualbox.service`
+
 I only needed to [update some parts](https://github.com/ushahidi/platform/pull/4393) in order to [work with the current mysql](https://github.com/ushahidi/platform/issues/4392).
 
 Ensure that php7.3 is used also locally (on your dev machine) to make git's pre-commit / pre-push hooks work.
@@ -42,6 +60,7 @@ Apply new migrations: `composer migrate` === `./bin/phinx migrate` (see `compose
 
 Rollback to a previous timestamp: `./bin/phinx rollback -t 20211215110945` (look at the migration script names to get the timestamp)
 
+Create new migration `./bin/phinx create MyNewMigration`.
 
 ### Connect to MySQL
 
@@ -103,7 +122,7 @@ Build Docker Image
 source .env
 date=$(date +%Y-%m-%d--%H-%M)
 #docker build -t ushahidi-client:$date .
-docker build -t ushahidi-client:$date -f use-build.Dockerfile .
+docker build -t ushahidi-client:$date -f Dockerfile .
 docker run  --env BACKEND_URL=${BACKEND_URL:-http://192.168.33.110/} -d -p 8888:8080 ushahidi-client:$date
 ```
 
