@@ -64,6 +64,7 @@ class Survey extends BaseModel
         'hide_location',
         'targeted_survey',
         'base_language',
+        'icon_url',
     ];
 
     /**
