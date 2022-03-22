@@ -203,7 +203,7 @@ class PostRepository extends OhanzeeRepository implements
             }
 
             /* -- VALUES HANDLING -- */
-            
+
             /* handle values already carried in in the $data object */
             $already_obtained_types = [];
             foreach ($this->data_to_entity_value_mappings as $mapping) {
@@ -243,7 +243,7 @@ class PostRepository extends OhanzeeRepository implements
                 unset($data[$mapping['attribute_key']]);
                 unset($data[$mapping['value']]);
             }
-            
+
             // Obtain the rest of the requested values
             $other_values = [];
             $types_to_fetch = null;
@@ -341,7 +341,7 @@ class PostRepository extends OhanzeeRepository implements
                 ['messages.id', 'message_id'],
                 ['messages.type', 'source']
             );
-        
+
         /*
          * The above join is optimized by the (post_id,type) index on messages.
          *
@@ -365,7 +365,8 @@ class PostRepository extends OhanzeeRepository implements
         $query
             ->join('forms', 'LEFT')
             ->on('posts.form_id', '=', 'forms.id')
-            ->select(['forms.color', 'color']);
+            ->select(['forms.color', 'color'])
+            ->select(['forms.icon_url', 'icon_url']);
 
         return $query;
     }
@@ -1204,6 +1205,7 @@ class PostRepository extends OhanzeeRepository implements
             $post['sets'],
             $post['source'],
             $post['color'],
+            $post['icon_url'],
             $post['lock']
         );
 
@@ -1262,6 +1264,7 @@ class PostRepository extends OhanzeeRepository implements
             $post['sets'],
             $post['source'],
             $post['color'],
+            $post['icon_url'],
             $post['lock']
         );
 
@@ -1320,7 +1323,8 @@ class PostRepository extends OhanzeeRepository implements
             $post['completed_stages'],
             $post['sets'],
             $post['source'],
-            $post['color']
+            $post['color'],
+            $post['icon_url'],
         );
         // Convert post_date to mysql format
         if (!empty($post['post_date'])) {
