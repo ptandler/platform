@@ -365,7 +365,8 @@ class PostRepository extends OhanzeeRepository implements
         $query
             ->join('forms', 'LEFT')
             ->on('posts.form_id', '=', 'forms.id')
-            ->select(['forms.color', 'color']);
+            ->select(['forms.color', 'color'])
+            ->select(['forms.icon_url', 'icon_url']);
 
         return $query;
     }
@@ -1204,6 +1205,7 @@ class PostRepository extends OhanzeeRepository implements
             $post['sets'],
             $post['source'],
             $post['color'],
+            $post['icon_url'],
             $post['lock']
         );
 
@@ -1262,6 +1264,7 @@ class PostRepository extends OhanzeeRepository implements
             $post['sets'],
             $post['source'],
             $post['color'],
+            $post['icon_url'],
             $post['lock']
         );
 
@@ -1320,7 +1323,8 @@ class PostRepository extends OhanzeeRepository implements
             $post['completed_stages'],
             $post['sets'],
             $post['source'],
-            $post['color']
+            $post['color'],
+            $post['icon_url'],
         );
         // Convert post_date to mysql format
         if (!empty($post['post_date'])) {

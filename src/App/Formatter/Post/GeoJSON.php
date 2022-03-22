@@ -36,7 +36,8 @@ class GeoJSON implements Formatter
                             'description' => $entity->content,
                             'marker-color' => $color,
                             'id' => $entity->id,
-                            'attribute_key' => $attribute
+                            'attribute_key' => $attribute,
+                            'icon_url' => $entity->icon_url,
                             // @todo add mark- attributes based on tag symbol+color
                             //'marker-size' => '',
                             //'marker-symbol' => '',
